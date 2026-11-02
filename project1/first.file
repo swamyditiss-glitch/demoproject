@@ -12,3 +12,22 @@
     ]
 }
 
+
+docker-swarm
+(allow all traffic and 0/0.0.0.0 in all master and nodes)
+
+in master->docker swarm init --advertise-addr masterip<- put master ip here
+ ::then you will get token copy it and paste in nod1 ,2,3
+make this changes in all four ->sudo usermod admin -aG docker.
+
+in master.
+next check connection with-> docker node ls
+it shows all three connections.
+
+docker pull hiremath21/itiss
+check images->docker images
+docker service create --name xyzweb -p 80:80 hiremath21/itiss
+docker service scale xyzweb=3
+
+to check connection and active nodes 
+do this in master->docker service ps xyzweb
