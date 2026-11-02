@@ -31,3 +31,82 @@ docker service scale xyzweb=3
 
 to check connection and active nodes 
 do this in master->docker service ps xyzweb
+
+========
+
+ansible 
+
+
+ansible lab
+take two instance ec2
+allow http traffic in both
+deb1
+sudo apt update
+sudo apt install ansible -y
+ansible --version
+ssh -V ->if not present then-apt install openssh-client -y
+
+create ssh-keygen
+copy public key from deb1 and paste it in deb2 in .ssh->nano authorized_keys paste here deb1 pub key
+then set permission of .ssh to 700 like this ->sudo chmod 700 .ssh
+
+IN deb2 
+sudo apt update
+sudo apt install openssh-server python3 -y
+sudo systemctl enable --now ssh
+sudo systemctl status ssh
+
+test deb2user@deb2id
+it should access without asking password,passwordless
+
+create anventory on debian1
+
+mkdir -p ansible-lab
+cd ansible-lab
+nano inventory.ini
+   |
+[debian_servers]
+Deb2ip ansible_user=deb2name
+
+save it
+expected ping pong
+
+nano setup_apache.yml
+        |
+---
+- name: Update deb2 and install apache2
+  hosts: debian_servers
+  become: true
+  tasks:
+   - name: refresh apt
+     ansible.builtin.apt:
+        update_cache: true
+   - name: upgrade install
+     ansible.builtin.apt:
+        upgrade: yes
+   - name: create user
+     ansible.builtin.user:
+        name: tinku
+        group: admin
+   - name: install
+     ansible.builtin.apt:
+        name: tree
+        state: present
+   - name: install apache2
+     ansible.builtin.apt:
+        name: apache2
+        state: present
+ 
+ save it
+ 
+
+run in deb1
+
+->ansible-playbook -i inventory.ini setup_apache2.yml 
+
+from this big process starts
+
+to check apache2
+ansible -i inventory.ini debian_servers -b -m command -a "apache2 -v"
+
+=================
