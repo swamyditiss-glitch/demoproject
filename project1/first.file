@@ -110,3 +110,34 @@ to check apache2
 ansible -i inventory.ini debian_servers -b -m command -a "apache2 -v"
 
 =================
+
+
+sudo apt install git
+Debian -> create directory -> project
+
+git init
+ssh-keygen
+
+Create repository on github -> ex: project
+
+public key copy -> github -> Repository settings -> deploy key
+
+git remote add origin "git@github.com:nasawebtech/project.git"
+
+git pull origin master
+
+configure
+
+git config --global user.email "nasawebtech@gmail.com"
+git config --global user.name "nasawebtech"
+
+nano first.txt
+git add .
+git commit -m "First commit"
+
+git push origin master
+
+
+===============
+
+
